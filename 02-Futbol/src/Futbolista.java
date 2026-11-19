@@ -11,6 +11,16 @@ public class Futbolista extends Thread {
         this.ntirades = 0;
     }
 
+
+    public int getNgols() {
+        return ngols;
+    }
+
+    public int getNtirades() {
+        return ntirades;
+    }
+    
+
     public void run(){
         for (int i = 0; i < NUM_TIRADES; i++) {
             ntirades++;
@@ -23,10 +33,27 @@ public class Futbolista extends Thread {
         String[] noms = {"Piqué", "Vinicius", "Torres", "Ramos", "Ronaldo", "Lewan",
                          "Belli", "Arnau", "Aspas", "Messi", "MBapé"};
 
+        Futbolista[] jugadors = new Futbolista[NUM_JUGADORS];
+        for (int i = 0; i < NUM_JUGADORS; i++) {
+            jugadors[i] = new Futbolista(noms[i]);
+        }
         System.out.println("Inici dels xuts --------------------");
+         for (Futbolista f : jugadors) {
+            f.start();
+        }
+
+        for (Futbolista f : jugadors) {
+            try {
+                f.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("Fi dels xuts -----------------------");
         System.out.println("--- Estadístiques ------");
-
+        for (Futbolista f : jugadors) {
+            System.out.printf("%-9s-> %d gols%n", f.getName(), f.getNgols());
+        }
     }
     
 }
